@@ -1,12 +1,19 @@
-use tourism;
+CREATE DATABASE tourism; --база данных туризм
+use tourism; --использование базы данных
+CREATE TABLE countries (
+    country_name VARCHAR(255) NOT NULL UNIQUE
+); --таблица страны
+ALTER TABLE countries --изменение таблицы
+ADD COLUMN country_id INT PRIMARY KEY AUTO_INCREMENT FIRST; --добавление внешних ключей с нумерацией через инкремент
 
-select * from countries;
+INSERT INTO countries (country_name) VALUES ('Russia'), ('Pakistan'); --добавление значений
+select * from countries; --вывод таблицы
 CREATE TABLE tours (
-    tour_id INT PRIMARY KEY AUTO_INCREMENT,
+    tour_id INT PRIMARY KEY AUTO_INCREMENT, 
     tour_name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2) NOT NULL  
-);
-select * from tours;
+);--нумерация через инкремент, добавление типов данных, создание таблицы
+select * from tours; --вывод таблицы
 insert into tours(tour_id,tour_name,price)
 values (1,'Moscow-tour',100.10);
 insert into tours(tour_id,tour_name,price)
@@ -35,7 +42,14 @@ CREATE TABLE clients (
 insert into clients (client_id,client_name,client_mail)
 values (1,'ivanov ivan ivanovich','iv@mail.ru');
 
-
+CREATE TABLE tour_bookings (
+    booking_id INT PRIMARY KEY AUTO_INCREMENT,
+    tour_id INT NOT NULL,
+    client_id INT NOT NULL,
+    booking_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tour_id) REFERENCES tours(tour_id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+); --создания таблицы для бронирования
 
 
 
