@@ -1,16 +1,6 @@
 -- ======================
--- ЗАДАНИЕ 1: СОЗДАНИЕ ТАБЛИЦ
+-- 1. РЎРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†
 -- ======================
-
-DROP TABLE IF EXISTS collection_track;
-DROP TABLE IF EXISTS artist_album;
-DROP TABLE IF EXISTS artist_genre;
-DROP TABLE IF EXISTS track;
-DROP TABLE IF EXISTS album;
-DROP TABLE IF EXISTS collection;
-DROP TABLE IF EXISTS artist;
-DROP TABLE IF EXISTS genre;
-
 CREATE TABLE artist (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL
@@ -30,7 +20,7 @@ CREATE TABLE album (
 CREATE TABLE track (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
-    duration INT NOT NULL, -- в секундах
+    duration INT NOT NULL, -- РІ СЃРµРєСѓРЅРґР°С…
     album_id INT REFERENCES album(id)
 );
 
@@ -59,117 +49,126 @@ CREATE TABLE collection_track (
 );
 
 -- ======================
--- ЗАПОЛНЕНИЕ ДАННЫМИ
+-- 2. Р—Р°РїРѕР»РЅРµРЅРёРµ С‚Р°Р±Р»РёС†
 -- ======================
 
--- Исполнители
-INSERT INTO artist (id, name) VALUES
-(1, 'Queen'),
-(2, 'Adele'),
-(3, 'OkeanElzy'),
-(4, 'Basta');
+-- 2.1. РђСЂС‚РёСЃС‚С‹
+INSERT INTO artist (name) VALUES
+('Queen'),
+('Adele'),
+('OkeanElzy'),
+('Basta');
 
--- Жанры
-INSERT INTO genre (id, name) VALUES
-(1, 'Rock'),
-(2, 'Pop'),
-(3, 'Rap');
+-- 2.2. Р–Р°РЅСЂС‹
+INSERT INTO genre (name) VALUES
+('Rock'),
+('Pop'),
+('Rap');
 
--- Альбомы
-INSERT INTO album (id, title, year) VALUES
-(1, 'Bohemian Rhapsody', 2018),
-(2, '25', 2019),
-(3, 'Баста 40', 2020);
+-- 2.3. РђР»СЊР±РѕРјС‹
+INSERT INTO album (title, year) VALUES
+('Bohemian Rhapsody', 2018),
+('25', 2019),
+('Р‘Р°СЃС‚Р° 40', 2020);
 
--- Треки (? 6)
-INSERT INTO track (id, title, duration, album_id) VALUES
-(1, 'Bohemian Rhapsody', 354, 1),   -- 5:54
-(2, 'Don’t Stop Me Now', 210, 1),   -- 3:30
-(3, 'Hello', 295, 2),               -- 4:55
-(4, 'Send My Love', 223, 2),        -- 3:43
-(5, 'Моя игра', 250, 3),            -- 4:10
-(6, 'Sansara', 300, 3);             -- 5:00
+-- 2.4. РўСЂРµРєРё
+INSERT INTO track (title, duration, album_id) VALUES
+('Bohemian Rhapsody', 354, 1),   -- 5:54
+('DonвЂ™t Stop Me Now', 210, 1),   -- 3:30
+('Hello', 295, 2),               -- 4:55
+('Send My Love', 223, 2),        -- 3:43
+('РњРѕР№ РїСѓС‚СЊ', 250, 3),            -- 4:10
+('Sansara', 300, 3),             -- 5:00
+-- С‚РµСЃС‚РѕРІС‹Рµ С‚СЂРµРєРё РґР»СЏ РїСЂРѕРІРµСЂРєРё СѓСЃР»РѕРІРёСЏ "РјРѕР№/my"
+('my own', 200, 2),
+('own my', 210, 2),
+('my', 180, 2),
+('oh my god', 240, 3),
+('myself', 200, 3),
+('by myself', 220, 3),
+('bemy self', 210, 3),
+('premyne', 190, 3);
 
--- Сборники (? 4)
-INSERT INTO collection (id, title, year) VALUES
-(1, 'Best of Rock', 2019),
-(2, 'Pop Hits', 2020),
-(3, 'Rap Classics', 2021),
-(4, 'Mixed Vibes', 2018);
+-- 2.5. РЎР±РѕСЂРЅРёРєРё
+INSERT INTO collection (title, year) VALUES
+('Best of Rock', 2019),
+('Pop Hits', 2020),
+('Rap Classics', 2021),
+('Mixed Vibes', 2018);
 
--- Связи: исполнители и жанры
+-- 2.6. РЎРІСЏР·СЊ Р°СЂС‚РёСЃС‚РѕРІ Рё Р¶Р°РЅСЂРѕРІ
 INSERT INTO artist_genre (artist_id, genre_id) VALUES
-(1, 1), -- Queen > Rock
-(2, 2), -- Adele > Pop
-(3, 1), -- OkeanElzy > Rock
-(4, 3); -- Basta > Rap
+(1, 1), -- Queen -> Rock
+(2, 2), -- Adele -> Pop
+(3, 1), -- OkeanElzy -> Rock
+(4, 3); -- Basta -> Rap
 
--- Связи: исполнители и альбомы
+-- 2.7. РЎРІСЏР·СЊ Р°СЂС‚РёСЃС‚РѕРІ Рё Р°Р»СЊР±РѕРјРѕРІ
 INSERT INTO artist_album (artist_id, album_id) VALUES
-(1, 1), -- Queen > Bohemian Rhapsody
-(2, 2), -- Adele > 25
-(4, 3); -- Basta > Баста 40
+(1, 1), -- Queen -> Bohemian Rhapsody
+(2, 2), -- Adele -> 25
+(4, 3); -- Basta -> Р‘Р°СЃС‚Р° 40
 
--- Связи: сборники и треки
+-- 2.8. РЎРІСЏР·СЊ СЃР±РѕСЂРЅРёРєРѕРІ Рё С‚СЂРµРєРѕРІ
 INSERT INTO collection_track (collection_id, track_id) VALUES
-(1, 1), (1, 2),
-(2, 3), (2, 4),
-(3, 5), (3, 6),
-(4, 1), (4, 5);
+(1, 1), (1, 2),  -- Best of Rock
+(2, 3), (2, 4),  -- Pop Hits
+(3, 5), (3, 6),  -- Rap Classics
+(4, 1), (4, 5);  -- Mixed Vibes
 
 -- ======================
--- ЗАДАНИЕ 2: SELECT-ЗАПРОСЫ
+-- 3. Р—Р°РґР°РЅРёРµ 2 (SELECT-Р·Р°РїСЂРѕСЃС‹)
 -- ======================
 
--- 1. Самый длинный трек
+-- 3.1. РЎР°РјС‹Р№ РґР»РёРЅРЅС‹Р№ С‚СЂРµРє
 SELECT title, duration
 FROM track
 ORDER BY duration DESC
 LIMIT 1;
 
--- 2. Треки ? 3,5 минут (210 секунд)
+-- 3.2. РўСЂРµРєРё РЅРµ РєРѕСЂРѕС‡Рµ 3,5 РјРёРЅСѓС‚
 SELECT title
 FROM track
 WHERE duration >= 210;
 
--- 3. Сборники 2018–2020
+-- 3.3. РЎР±РѕСЂРЅРёРєРё 2018вЂ“2020
 SELECT title
 FROM collection
 WHERE year BETWEEN 2018 AND 2020;
 
--- 4. Исполнители с одним словом в имени
+-- 3.4. РСЃРїРѕР»РЅРёС‚РµР»Рё СЃ РѕРґРЅРёРј СЃР»РѕРІРѕРј РІ РёРјРµРЅРё
 SELECT name
 FROM artist
 WHERE name NOT LIKE '% %';
 
--- 5. Треки со словами "мой" или "my"
+-- 3.5. РўСЂРµРєРё СЃРѕ СЃР»РѕРІРѕРј "РјРѕР№" РёР»Рё "my"
 SELECT title
 FROM track
-WHERE title ILIKE '%my%' OR title ILIKE '%мой%';
+WHERE title ~* '\m(my|РјРѕР№)\M';
 
 -- ======================
--- ЗАДАНИЕ 3: SELECT-ЗАПРОСЫ
+-- 4. Р—Р°РґР°РЅРёРµ 3 (SELECT-Р·Р°РїСЂРѕСЃС‹)
 -- ======================
 
--- 1. Количество исполнителей в каждом жанре
+-- 4.1. РљРѕР»-РІРѕ РёСЃРїРѕР»РЅРёС‚РµР»РµР№ РІ РєР°Р¶РґРѕРј Р¶Р°РЅСЂРµ
 SELECT g.name, COUNT(ag.artist_id) AS artist_count
 FROM genre g
 JOIN artist_genre ag ON g.id = ag.genre_id
 GROUP BY g.name;
 
--- 2. Количество треков в альбомах 2019–2020
+-- 4.2. РљРѕР»-РІРѕ С‚СЂРµРєРѕРІ РёР· Р°Р»СЊР±РѕРјРѕРІ 2019вЂ“2020
 SELECT COUNT(t.id) AS track_count
 FROM track t
 JOIN album a ON t.album_id = a.id
 WHERE a.year BETWEEN 2019 AND 2020;
 
--- 3. Средняя продолжительность треков по альбомам
+-- 4.3. РЎСЂРµРґРЅСЏСЏ РїСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚СЊ С‚СЂРµРєРѕРІ РїРѕ Р°Р»СЊР±РѕРјР°Рј
 SELECT a.title, AVG(t.duration) AS avg_duration
 FROM album a
 JOIN track t ON a.id = t.album_id
 GROUP BY a.title;
 
--- 4. Исполнители без альбомов 2020 года
+-- 4.4. РСЃРїРѕР»РЅРёС‚РµР»Рё, РЅРµ РІС‹РїСѓСЃРєР°РІС€РёРµ Р°Р»СЊР±РѕРјС‹ РІ 2020
 SELECT ar.name
 FROM artist ar
 WHERE ar.id NOT IN (
@@ -179,7 +178,7 @@ WHERE ar.id NOT IN (
     WHERE a.year = 2020
 );
 
--- 5. Сборники, где есть исполнитель Queen
+-- 4.5. РЎР±РѕСЂРЅРёРєРё, РіРґРµ РµСЃС‚СЊ Queen
 SELECT DISTINCT c.title
 FROM collection c
 JOIN collection_track ct ON c.id = ct.collection_id
